@@ -3,6 +3,7 @@ const router = express.Router();
 const Album = require("../models/Album");
 const User = require("../models/User");
 const Image = require("../models/Image");
+const cloudinary = require("../config/cloudinary");
 const authMiddleware = require("../middleware/authMiddleware");
 
 // ------------- CREATE ALBUM--------------
@@ -310,7 +311,59 @@ router.delete("/:albumId", authMiddleware, async (req, res) => {
         message: "Unauthorized user to do current job.",
       });
     }
-    const deletedAlbum = await Album.findOneAndDelete({ albumId });
+   
+
+    /*
+========================================
+FIND ALL IMAGES
+========================================
+*/
+
+const images = await Image.find({
+  albumId,
+});
+
+/*
+========================================
+DELETE CLOUDINARY IMAGES
+========================================
+*/
+
+for (const image of images) {
+  if (image.cloudinaryId) {
+   try {
+  await cloudinary.uploader.destroy(
+    image.cloudinaryId,
+  );
+} catch (cloudinaryError) {
+  console.log(
+    "Cloudinary delete failed:",
+    cloudinaryError,
+  );
+}
+  }
+}
+
+/*
+========================================
+DELETE IMAGE DOCUMENTS
+========================================
+*/
+
+await Image.deleteMany({
+  albumId,
+});
+
+/*
+========================================
+DELETE ALBUM
+========================================
+*/
+
+const deletedAlbum =
+  await Album.findOneAndDelete({
+    albumId,
+  });
 
     if (!deletedAlbum) {
       return res.status(404).json({
