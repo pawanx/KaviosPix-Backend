@@ -7,12 +7,14 @@ const { initializeDatabase } = require("./db/db.connect");
 
 const app = express();
 
-app.use(cors({
-  origin : [
-     "http://localhost:5173",
-     "https://kavios-pix-frontend-one.vercel.app"
-  ]
-}));
+app.use(
+  cors({
+    origin: "https://kavios-pix-frontend-one.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true, // I am using auth
+  }),
+);
+
 app.use(express.json());
 
 initializeDatabase();
