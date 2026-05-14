@@ -10,6 +10,7 @@ const app = express();
 app.use(cors({
   origin : [
      "http://localhost:5173",
+     "https://kavios-pix-frontend-one.vercel.app"
   ]
 }));
 app.use(express.json());
