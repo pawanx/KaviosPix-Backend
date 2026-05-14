@@ -9,7 +9,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://kavios-pix-frontend-one.vercel.app",
+    origin:["https://kavios-pix-frontend-one.vercel.app","http://localhost:5173"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // I am using auth
   }),
