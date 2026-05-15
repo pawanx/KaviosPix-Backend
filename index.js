@@ -2,14 +2,18 @@ const express = require("express");
 const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const albumRoutes = require("./routes/albumRoutes");
-const imageRoutes = require("./routes/imageRoutes")
+const imageRoutes = require("./routes/imageRoutes");
+const userRoutes = require("./routes/userRoutes");
 const { initializeDatabase } = require("./db/db.connect");
 
 const app = express();
 
 app.use(
   cors({
-    origin:["https://kavios-pix-frontend-one.vercel.app","http://localhost:5173"],
+    origin: [
+      "https://kavios-pix-frontend-one.vercel.app",
+      "http://localhost:5173",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // I am using auth
   }),
@@ -21,7 +25,8 @@ initializeDatabase();
 
 app.use("/auth", authRoutes);
 app.use("/albums", albumRoutes);
-app.use("/albums", imageRoutes)
+app.use("/albums", imageRoutes);
+app.use("/users", userRoutes);
 app.get("/", (req, res) => {
   res.send("Hello, KaviosPix API Running fine.");
 });
